@@ -1,14 +1,10 @@
 #!/bin/bash
 declare -r MAX_LEN_PER_LINE=128
-DATE_WRONG_LINES=()
-TIME_WORNG_LINES=()
-META_WRONG_LINES=()
-TEXT_TOO_LONG_LINES=()
 function isDateValid {
     DATE=$element
 
     if [[ $DATE =~ ^[0-9]{1,2}.[0-9a-zA-Z]{1,3}.[0-9]{4}$ ]]; then
-        echo "Date $DATE is a number!"
+        #echo "Date $DATE is a number!"
         day=`echo $DATE | cut -d'.' -f1`
         month=`echo $DATE | cut -d'.' -f2`
         year=`echo $DATE | cut -d'.' -f3`
@@ -40,18 +36,18 @@ function isDateValid {
                 fi
 
         ymd=$year"-"$month"-"$day
-        echo "ymd: "$ymd
+        #echo "ymd: "$ymd
         dmy=$(echo "$ymd" | awk -F- '{ OFS=FS; print $3,$2,$1 }')
-        echo "dmy: "$dmy
+        #echo "dmy: "$dmy
         if date --date "$dmy" >/dev/null 2>&1; then
-            echo "OK"
+            #echo "OK"
             return 0
         else
-            echo "NOK"
+            #echo "NOK"
             return 1
         fi
     else
-        echo "Date $DATE is not a number"
+        #echo "Date $DATE is not a number"
         return 1
     fi
 }
@@ -59,44 +55,45 @@ function isTimeValid() {
 	TIME=$element
 	ret=$(echo $TIME | awk -F ':' '{ print ($1 <= 23 && $2 <= 59 && $3 <= 59) ? 1 : 0 }')
 	if [ $ret = 1 ]; then
-		echo "OK"
 		return 0
     else
-		echo "NOK"
 		return 1
     fi
 }
 function isMetaInfoValid() {
 	META=$line
 	if [[ $META =~ "DEBUG:" || $META =~ "INFO:" || $META =~ "WARN:" || $META =~ "ERROR:" ]]; then
-		echo "matched"
+		#echo "matched"
 		return 0;
 	else
-		echo "didn't match"
+		#echo "didn't match"
 		return 1;
 	fi
 }
 function isTextLengthValid() {
 	TEXT=$line
 	iLen=${#TEXT}
-	if [[ iLen < $MAX_LEN_PER_LINE ]]; then 
+	if [[ iLen -lt $MAX_LEN_PER_LINE ]]; then 
 		return 0
 	else
 		return 1
 	fi
 }
+#---------------main function-----------
 mwIdx=0
 twIdx=0
+DATE_WRONG_LINES=()
+TIME_WORNG_LINES=()
+META_WRONG_LINES=()
+TEXT_TOO_LONG_LINES=()
 while IFS='' read -r line || [[ -n "$line" ]]; do
 	vals=$(echo $line | tr " " "\n")
 	lineNumber=$((lineNumber + 1))
-	if !isMetaInfoValid $line; then  
-		META_WRONG_LINES[mwIdx]=lineNumber
-		mwIdx=$((mwIdx + 1))
+	if ! isMetaInfoValid $line; then  
+		META_WRONG_LINES+=($lineNumber)
 	fi	
-	if !isTextLengthValid $line; then 
-		TEXT_TOO_LONG_LINES[twIdx]=lineNumber
-		twIdx=$((twIdx + 1))
+	if ! isTextLengthValid $line; then 
+		TEXT_TOO_LONG_LINES+=($lineNumber)
 	fi
 	var=0
 	dwIdx=0
@@ -106,17 +103,34 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 		var=$((var + 1))
 		if [ $var = 1 ] 
 		then
-			if !isDateValid $element; then
-				DATE_WRONG_LINES[dwIdx]=lineNumber
-				dwIdx=$((dwIdx + 1))
+			if  isTimeValid $element; then
+				break;
+			fi		
+			if ! isDateValid $element; then
+				DATE_WRONG_LINES+=($lineNumber)
 			fi 
 		elif [ $var = 2 ] 
 		then 
-			if !isTimeValid $element; then
-				TIME_WORNG_LINES[twIdx]=lineNumber 
-				twIdx=$((twIdx + 1))
+			if ! isTimeValid $element; then
+				TIME_WORNG_LINES+=($lineNumber)
 			fi 
 		fi
 	done
 done < "$1"
-
+#---------------output result is here-----------
+#date validation
+printf 'Date wrong Lines: '
+printf "%s " "${DATE_WRONG_LINES[@]}"	
+printf "\n"
+#time validation
+printf 'Time wrong Lines: '
+printf "%s " "${TIME_WORNG_LINES[@]}"	
+printf "\n"
+#meta validation
+printf 'Meta wrong Lines: '
+printf "%s " "${META_WRONG_LINES[@]}"	
+printf "\n"
+#Text validation
+printf 'Text too long Lines: '
+printf "%s " "${TEXT_TOO_LONG_LINES[@]}"	
+printf "\n"
