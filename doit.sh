@@ -1,6 +1,11 @@
 #!/bin/bash
+declare -r MAX_LEN_PER_LINE=128
+DATE_WRONG_LINES=()
+TIME_WORNG_LINES=()
+META_WRONG_LINES=()
+TEXT_TOO_LONG_LINES=()
 function isDateValid {
-    DATE=$1
+    DATE=$element
 
     if [[ $DATE =~ ^[0-9]{1,2}.[0-9a-zA-Z]{1,3}.[0-9]{4}$ ]]; then
         echo "Date $DATE is a number!"
@@ -39,10 +44,10 @@ function isDateValid {
         dmy=$(echo "$ymd" | awk -F- '{ OFS=FS; print $3,$2,$1 }')
         echo "dmy: "$dmy
         if date --date "$dmy" >/dev/null 2>&1; then
-                echo "OK"
+            echo "OK"
             return 0
         else
-                echo "NOK"
+            echo "NOK"
             return 1
         fi
     else
@@ -50,40 +55,88 @@ function isDateValid {
         return 1
     fi
 }
-function isValidateTime() {
-	ret=$(echo $element | awk -F ':' '{ print ($1 <= 23 && $2 <= 59 && $3 <= 59) ? 1 : 0 }')
-	if $ret = 1
-	then
-		return 1
-	elif
+function isTimeValid() {
+	TIME=$element
+	ret=$(echo $TIME | awk -F ':' '{ print ($1 <= 23 && $2 <= 59 && $3 <= 59) ? 1 : 0 }')
+	if [ $ret = 1 ]; then
+		echo "OK"
 		return 0
+    else
+		echo "NOK"
+		return 1
+    fi
+}
+function isMetaInfoValid() {
+	META=$line
+	if [[ $META =~ "DEBUG:" || $META =~ "INFO:" || $META =~ "WARN:" || $META =~ "ERROR:" ]]; then
+		echo "matched"
+		return 0;
+	else
+		echo "didn't match"
+		return 1;
 	fi
 }
+function isTextLengthValid() {
+	TEXT=$line
+	iLen=${#TEXT}
+	if [[ iLen < $MAX_LEN_PER_LINE ]]; then 
+		return 0
+	else
+		return 1
+	fi
+}
+mwIdx=0
+twIdx=0
 while IFS='' read -r line || [[ -n "$line" ]]; do
    # echo "Text read from file: $line"
 	#echo $line | sed 's/ /\n/g' 
 	vals=$(echo $line | tr " " "\n")
-	echo "-------------------"
+	#echo $line
+	lineNumber=$((lineNumber + 1))
+	echo "-------------------Line numner: $lineNumber"
+	#valiate meta info
+	if isMetaInfoValid $line; then 
+		echo "meta info line number: $lineNumber is valid =)"
+	else 
+		echo "bad format meta info line number: $lineNumber =)"
+		META_WRONG_LINES[mwIdx]=lineNumber
+		mwIdx=$((mwIdx + 1))
+	fi	
+	#validate length of a string , for now we defined length is 128 per line 
+	if isTextLengthValid $line; then 
+		echo "Length is ok"
+	else 
+		echo "Length is too long"
+		TEXT_TOO_LONG_LINES[twIdx]=lineNumber
+		twIdx=$((twIdx + 1))
+	fi
+	#valiate date & time 
 	var=0
+	dwIdx=0
+	twIdx=0
 	for element in $vals
 	do
 		#echo "$element"
 		var=$((var + 1))
 		if [ $var = 1 ] 
 		then
-			echo "$element"
-			#if isDateValid $element; then
-			#	echo "date is valid =)"
-			#else
-			#	echo "bad format date"
-			#fi 
+			#echo "$element"
+			if isDateValid $element; then
+				echo "date is valid =)"
+			else
+				echo "bad format date"
+				DATE_WRONG_LINES[dwIdx]=lineNumber
+				dwIdx=$((dwIdx + 1))
+			fi 
 		elif [ $var = 2 ] 
 		then 
-			echo "$element"
-			if isValidateTime $element; then
+			#echo "$element"
+			if isTimeValid $element; then
 				echo "time is valid =)"
 			else
 				echo "bad format time"
+				TIME_WORNG_LINES[twIdx]=lineNumber 
+				twIdx=$((twIdx + 1))
 			fi 
 		fi
 	done
