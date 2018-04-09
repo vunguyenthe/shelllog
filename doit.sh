@@ -119,18 +119,18 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 done < "$1"
 #---------------output result is here-----------
 #date validation
-printf 'Date wrong Lines: '
+printf 'Date wrong lines: '
 printf "%s " "${DATE_WRONG_LINES[@]}"	
 printf "\n"
 #time validation
-printf 'Time wrong Lines: '
+printf 'Time wrong lines: '
 printf "%s " "${TIME_WORNG_LINES[@]}"	
 printf "\n"
 #meta validation
-printf 'Meta wrong Lines: '
+printf 'Meta wrong lines: '
 printf "%s " "${META_WRONG_LINES[@]}"	
 printf "\n"
 #Text validation
-printf 'Text too long Lines: '
+printf 'Text too long lines: '
 printf "%s " "${TEXT_TOO_LONG_LINES[@]}"	
 printf "\n"
