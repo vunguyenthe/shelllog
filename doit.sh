@@ -88,53 +88,31 @@ function isTextLengthValid() {
 mwIdx=0
 twIdx=0
 while IFS='' read -r line || [[ -n "$line" ]]; do
-   # echo "Text read from file: $line"
-	#echo $line | sed 's/ /\n/g' 
 	vals=$(echo $line | tr " " "\n")
-	#echo $line
 	lineNumber=$((lineNumber + 1))
-	echo "-------------------Line numner: $lineNumber"
-	#valiate meta info
-	if isMetaInfoValid $line; then 
-		echo "meta info line number: $lineNumber is valid =)"
-	else 
-		echo "bad format meta info line number: $lineNumber =)"
+	if !isMetaInfoValid $line; then  
 		META_WRONG_LINES[mwIdx]=lineNumber
 		mwIdx=$((mwIdx + 1))
 	fi	
-	#validate length of a string , for now we defined length is 128 per line 
-	if isTextLengthValid $line; then 
-		echo "Length is ok"
-	else 
-		echo "Length is too long"
+	if !isTextLengthValid $line; then 
 		TEXT_TOO_LONG_LINES[twIdx]=lineNumber
 		twIdx=$((twIdx + 1))
 	fi
-	#valiate date & time 
 	var=0
 	dwIdx=0
 	twIdx=0
 	for element in $vals
 	do
-		#echo "$element"
 		var=$((var + 1))
 		if [ $var = 1 ] 
 		then
-			#echo "$element"
-			if isDateValid $element; then
-				echo "date is valid =)"
-			else
-				echo "bad format date"
+			if !isDateValid $element; then
 				DATE_WRONG_LINES[dwIdx]=lineNumber
 				dwIdx=$((dwIdx + 1))
 			fi 
 		elif [ $var = 2 ] 
 		then 
-			#echo "$element"
-			if isTimeValid $element; then
-				echo "time is valid =)"
-			else
-				echo "bad format time"
+			if !isTimeValid $element; then
 				TIME_WORNG_LINES[twIdx]=lineNumber 
 				twIdx=$((twIdx + 1))
 			fi 
