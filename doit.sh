@@ -119,10 +119,10 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 done < "$1"
 #---------------output result is here-----------
 #date validation
-iDateWrongLen=${#DATE_WRONG_LINES}
-iTimeWrongLen=${#TIME_WORNG_LINES}
-iMetaWrongLen=${#META_WRONG_LINES}
-iTextTooLongLen=${#TEXT_TOO_LONG_LINES}
+iDateWrongLen=${#DATE_WRONG_LINES[@]}
+iTimeWrongLen=${#TIME_WORNG_LINES[@]}
+iMetaWrongLen=${#META_WRONG_LINES[@]}
+iTextTooLongLen=${#TEXT_TOO_LONG_LINES[@]}
 
 if [[ $iDateWrongLen -gt 0 || $iDateWrongLen -gt 0 ||  $iDateWrongLen -gt 0 || $iDateWrongLen -gt 0 ]]; then
 	echo "--------Failed with summary----------"
