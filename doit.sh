@@ -119,18 +119,40 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 done < "$1"
 #---------------output result is here-----------
 #date validation
-printf 'Date wrong lines: '
-printf "%s " "${DATE_WRONG_LINES[@]}"	
-printf "\n"
-#time validation
-printf 'Time wrong lines: '
-printf "%s " "${TIME_WORNG_LINES[@]}"	
-printf "\n"
-#meta validation
-printf 'Meta wrong lines: '
-printf "%s " "${META_WRONG_LINES[@]}"	
-printf "\n"
-#Text validation
-printf 'Text too long lines: '
-printf "%s " "${TEXT_TOO_LONG_LINES[@]}"	
-printf "\n"
+iDateWrongLen=${#DATE_WRONG_LINES}
+iTimeWrongLen=${#TIME_WORNG_LINES}
+iMetaWrongLen=${#META_WRONG_LINES}
+iTextTooLongLen=${#TEXT_TOO_LONG_LINES}
+
+if [[ $iDateWrongLen -gt 0 || $iDateWrongLen -gt 0 ||  $iDateWrongLen -gt 0 || $iDateWrongLen -gt 0 ]]; then
+	echo "--------Failed with summary----------"
+	printf "Date: %s errors\n" "$iDateWrongLen"	
+	printf "Time: %s errors\n" "$iTimeWrongLen"	
+	printf "MetaInfo: %s errors\n" "$iMetaWrongLen"	
+	printf "Text too long: %s errors\n" "$iTextTooLongLen"	
+
+	echo "--------Failed with details---------"
+	printf 'Date wrong lines: '
+	printf "%s " "${DATE_WRONG_LINES[@]}"	
+	printf "\n"
+	#time validation
+	printf 'Time wrong lines: '
+	printf "%s " "${TIME_WORNG_LINES[@]}"	
+	printf "\n"
+	#meta validation
+	printf 'Meta wrong lines: '
+	printf "%s " "${META_WRONG_LINES[@]}"	
+	printf "\n"
+	#Text validation
+	printf 'Text too long lines: '
+	printf "%s " "${TEXT_TOO_LONG_LINES[@]}"	
+	printf "\n"
+else 
+	echo "--------Success with summary----------"
+	printf "Date: %s errors\n" "$iDateWrongLen"	
+	printf "Time: %s errors\n" "$iTimeWrongLen"	
+	printf "MetaInfo: %s errors\n" "$iMetaWrongLen"	
+	printf "Text too long: %s errors\n" "$iTextTooLongLen"	
+		
+fi
+
