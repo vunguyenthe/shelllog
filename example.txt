@@ -1,0 +1,16 @@
+27.03.2018 11:33:08.394 - DEBUG: 
+27.33.2018 11:33:08.404 - DEBUG: ####################################
+27.03.2018 110:33:08.405 - DEBUG: #                                 #
+270.03.2018 12:08:07.947 - INFO: Startup: 
+27.03.2018 11:33:08.405 - DEBUG: rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+11:33:08.405 - DEBUG: rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+27.03.2018 11:33:08.394 - blabla: Key:
+27.03.2018 11:33:08.394 - DEBUG: Date Time - MetaInfo: Text
+27.03.2018 11:33:08.394 - DEBUG: Date: DD.MM.YYYY	day month year
+27.03.2018 11:33:08.394 - DEBUG: Time: hh:mm:SS:ss	hours:minutes:seconds:milliseconds
+27.03.2018 11:33:08.394 - DEBUG: MetaInfo: DEBUG or Info
+27.03.2018 11:33:08.394 - DEBUG: Text: string in ASCII coding (codepoints < 100)
+27.03.2018 11:33:08.394 - DEBUG: With the bash script the following output should be generated:
+27.03.2018 11:33:08.394 - DEBUG: Good luck!
+
