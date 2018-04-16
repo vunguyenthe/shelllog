@@ -123,36 +123,30 @@ iDateWrongLen=${#DATE_WRONG_LINES[@]}
 iTimeWrongLen=${#TIME_WORNG_LINES[@]}
 iMetaWrongLen=${#META_WRONG_LINES[@]}
 iTextTooLongLen=${#TEXT_TOO_LONG_LINES[@]}
-
+fname=$(echo $1 | cut -f 1 -d '.') #get only filename without ext
+LOG_FILE="$fname""_""report.log"
 if [[ $iDateWrongLen -gt 0 || $iDateWrongLen -gt 0 ||  $iDateWrongLen -gt 0 || $iDateWrongLen -gt 0 ]]; then
-	echo "--------Failed with summary----------"
-	printf "Date: %s errors\n" "$iDateWrongLen"	
-	printf "Time: %s errors\n" "$iTimeWrongLen"	
-	printf "MetaInfo: %s errors\n" "$iMetaWrongLen"	
-	printf "Text too long: %s errors\n" "$iTextTooLongLen"	
-
-	echo "--------Failed with details---------"
-	printf 'Date wrong lines: '
-	printf "%s " "${DATE_WRONG_LINES[@]}"	
-	printf "\n"
+	echo "--------Failed with summary----------" | tee "${LOG_FILE}" #overwrite if it existed
+	echo "Date: $iDateWrongLen errors"	| tee -a "${LOG_FILE}"
+	echo "Time: $iTimeWrongLen errors" | tee -a "${LOG_FILE}"
+	echo "MetaInfo: $iMetaWrongLen errors"	| tee -a "${LOG_FILE}"
+	echo "Text too long: $iTextTooLongLen errors" | tee -a "${LOG_FILE}"
+	echo "--------Failed with details---------" | tee -a "${LOG_FILE}"
+	echo "Date wrong lines:  ${DATE_WRONG_LINES[@]}" | tee -a "${LOG_FILE}"
 	#time validation
-	printf 'Time wrong lines: '
-	printf "%s " "${TIME_WORNG_LINES[@]}"	
-	printf "\n"
+	echo "Time wrong lines: ${TIME_WORNG_LINES[@]}" | tee -a "${LOG_FILE}"
 	#meta validation
-	printf 'Meta wrong lines: '
-	printf "%s " "${META_WRONG_LINES[@]}"	
-	printf "\n"
+	echo "Meta wrong lines: ${META_WRONG_LINES[@]}" | tee -a "${LOG_FILE}"
 	#Text validation
-	printf 'Text too long lines: '
-	printf "%s " "${TEXT_TOO_LONG_LINES[@]}"	
-	printf "\n"
+	echo "Text too long lines: ${TEXT_TOO_LONG_LINES[@]}" | tee -a "${LOG_FILE}"
+	echo "Please find ${LOG_FILE} to get a detailed report";
 else 
-	echo "--------Success with summary----------"
-	printf "Date: %s errors\n" "$iDateWrongLen"	
-	printf "Time: %s errors\n" "$iTimeWrongLen"	
-	printf "MetaInfo: %s errors\n" "$iMetaWrongLen"	
-	printf "Text too long: %s errors\n" "$iTextTooLongLen"	
-		
+	echo "--------Success with summary----------" > "${LOG_FILE}" #overwrite if it existed
+	echo "Date: $iDateWrongLen errors"	| tee -a "${LOG_FILE}"
+	echo "Time: $iTimeWrongLen errors"	| tee -a "${LOG_FILE}"
+	echo "MetaInfo: $iMetaWrongLen errors"	| tee -a "${LOG_FILE}"
+	echo "Text too long: $iTextTooLongLen errors"	| tee -a "${LOG_FILE}"	
+	echo "Please find ${LOG_FILE} to get a detailed report";
 fi
+
 
