@@ -1,5 +1,12 @@
 #!/bin/bash
 declare -r MAX_LEN_PER_LINE=128
+if [ ! -f $1 ]; then
+    echo "File not found!"
+    exit
+elif [ -z "$1" ]; then
+    echo "Command is invalid! should be: doit.sh filename"
+    exit    
+fi    
 function isDateValid {
     DATE=$1
 	
